@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Super Quiz 5ª Party 💖✨</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700&display=swap" rel="stylesheet">
+<title>Super Quiz Party 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -15,6 +16,7 @@ justify-content:center;
 align-items:center;
 min-height:100vh;
 padding:15px;
+overflow:hidden;
 }
 .container{
 background:white;
@@ -24,113 +26,148 @@ border-radius:25px;
 padding:25px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
 text-align:center;
+position:relative;
 }
-h1{font-size:30px;color:#ff1493;margin-bottom:15px;}
-.question{font-size:24px;margin-bottom:20px;color:#6a1b9a;}
+h1{font-size:28px;color:#ff1493;margin-bottom:10px;}
+.intro{font-size:20px;margin-bottom:20px;color:#6a1b9a;}
+button{
+padding:14px 25px;
+border:none;
+border-radius:20px;
+background:linear-gradient(90deg,#ff69b4,#87cefa);
+color:white;
+font-size:20px;
+cursor:pointer;
+}
+button:active{transform:scale(0.95);}
+.question{font-size:23px;margin-bottom:20px;color:#6a1b9a;}
 .option{
-margin:12px 0;
-padding:18px;
+margin:10px 0;
+padding:16px;
 border-radius:18px;
 background:#ffe6fa;
-font-size:22px;
+font-size:20px;
 cursor:pointer;
 transition:0.3s;
 }
 .option:active{transform:scale(0.95);}
-.message{margin-top:15px;font-size:20px;min-height:30px;}
-.progress{height:10px;background:#eee;border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.message{margin-top:10px;font-size:18px;min-height:25px;}
+.progress{height:8px;background:#eee;border-radius:10px;margin-bottom:15px;}
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff69b4,#87cefa);transition:0.3s;}
+.star{
+position:absolute;
+color:gold;
+animation:fall 3s linear infinite;
+}
+@keyframes fall{
+0%{top:-10px;}
+100%{top:100vh;}
+}
 </style>
 </head>
 
 <body>
 <div class="container">
-<h1>Quiz Super Amici 💖</h1>
+
+<div id="introScreen">
+<h1>✨ Super Quiz tra Amiche ✨</h1>
+<div class="intro">
+Carolina, Elena e Alice hanno organizzato un pomeriggio speciale! 💖  
+Tra risate, glitter e cervelli in azione…  
+Chi sarà la Regina del Quiz? 👑
+</div>
+<button onclick="startGame()">Inizia l'avventura 🚀</button>
+</div>
+
+<div id="game" style="display:none;">
+<h1>Super Quiz Party 💖</h1>
 <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
 <div id="quiz"></div>
 <div class="message" id="message"></div>
 </div>
 
+</div>
+
 <audio id="correctSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9c6e08.mp3"></audio>
 <audio id="wrongSound" src="https://cdn.pixabay.com/audio/2022/10/16/audio_7f51fef9d5.mp3"></audio>
+<audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7f2f1a64f5.mp3"></audio>
 
 <script>
 
+function startGame(){
+document.getElementById("introScreen").style.display="none";
+document.getElementById("game").style.display="block";
+loadQuestion();
+createStars();
+}
+
+function createStars(){
+setInterval(()=>{
+let s=document.createElement("div");
+s.classList.add("star");
+s.innerHTML="✨";
+s.style.left=Math.random()*100+"vw";
+s.style.fontSize=Math.random()*20+10+"px";
+document.body.appendChild(s);
+setTimeout(()=>s.remove(),3000);
+},400);
+}
+
 const questions = [
 
-/* ===== MATEMATICA ===== */
-{q:"Carolina calcola: 9 x 8?",c:"72",a:"64",w:"81",f:"Il numero di glitter nel suo astuccio"},
-{q:"Elena dice: 144 : 12?",c:"12",a:"14",w:"10",f:"Le caramelle di Chicco"},
-{q:"Alice calcola: 15 x 6?",c:"90",a:"80",w:"75",f:"Troppi selfie"},
-{q:"Adele ricorda: 100 : 4?",c:"25",a:"20",w:"30",f:"Unicorni rosa"},
-{q:"Federica calcola: 11 x 11?",c:"121",a:"111",w:"131",f:"Numero fashion"},
-{q:"Azzurra dice: 36 : 6?",c:"6",a:"5",w:"7",f:"Arcobaleno"},
-{q:"Tomas prova: 7 x 7?",c:"49",a:"42",w:"56",f:"Quanti videogiochi vorrebbe"},
-{q:"Chicco chiede: 18 x 3?",c:"54",a:"48",w:"60",f:"Pizzette infinite"},
-{q:"Alessio calcola: 81 : 9?",c:"9",a:"8",w:"7",f:"Numero misterioso"},
-{q:"Adriano dice: 25 x 4?",c:"100",a:"90",w:"110",f:"Glitter 100"},
+/* MATEMATICA */
+{q:"Carolina calcola: 9 x 8?",c:"72",a:"64",w:"81",f:"Glitter infinito"},
+{q:"Elena dice: 144 : 12?",c:"12",a:"14",w:"10",f:"Pizzette"},
+{q:"Alice calcola: 25 x 4?",c:"100",a:"90",w:"110",f:"Arcobaleno"},
+{q:"Adele ricorda: 81 : 9?",c:"9",a:"8",w:"7",f:"Unicorno"},
+{q:"Federica dice: 7 x 7?",c:"49",a:"42",w:"56",f:"Stelline"},
 
-/* ===== GEOGRAFIA ===== */
-{q:"Maestra Chiara chiede: capitale Francia?",c:"Parigi",a:"Lione",w:"Roma",f:"Hogwarts"},
-{q:"Maestra Cristiana domanda: capitale Germania?",c:"Berlino",a:"Monaco",w:"Vienna",f:"Castello rosa"},
-{q:"Carolina ricorda: capitale Spagna?",c:"Madrid",a:"Barcellona",w:"Lisbona",f:"Fantasilandia"},
-{q:"Elena dice: capitale Grecia?",c:"Atene",a:"Sparta",w:"Roma",f:"Hogwarts antica"},
-{q:"Alice ricorda: capitale UK?",c:"Londra",a:"Manchester",w:"Dublino",f:"Castello glitter"},
-{q:"Adele dice: capitale Canada?",c:"Ottawa",a:"Toronto",w:"Chicago",f:"Hogwarts nord"},
-{q:"Federica ricorda: capitale Egitto?",c:"Il Cairo",a:"Giza",w:"Nairobi",f:"Piramide glitter"},
-{q:"Azzurra dice: continente Italia?",c:"Europa",a:"Asia",w:"Africa",f:"Fantasilandia"},
-{q:"Tomas ricorda: pianeta rosso?",c:"Marte",a:"Venere",w:"Giove",f:"Pianeta merendine"},
-{q:"Chicco dice: il sole è una?",c:"Stella",a:"Pianeta",w:"Cometa",f:"Lampadina gigante"},
+/* SCIENZE */
+{q:"L'acqua bolle a?",c:"100°C",a:"90°C",w:"50°C",f:"Quando urli QUAAA"},
+{q:"Lo stato solido dell'acqua è?",c:"Ghiaccio",a:"Vapore",w:"Pioggia",f:"Granita rosa"},
+{q:"Il sole è una?",c:"Stella",a:"Pianeta",w:"Cometa",f:"Lampadina gigante"},
+{q:"1000 grammi sono?",c:"1 kg",a:"10 kg",w:"100 kg",f:"Chilo glitter"},
+{q:"La Terra è un?",c:"Pianeta",a:"Stella",w:"Asteroide",f:"Palla magica"},
+{q:"L'aria è principalmente un?",c:"Gas",a:"Liquido",w:"Solido",f:"Profumo glitter"},
+{q:"Il corpo umano ha circa?",c:"206 ossa",a:"200 ossa",w:"150 ossa",f:"Ossa rosa"},
+{q:"60 minuti sono?",c:"1 ora",a:"2 ore",w:"30 minuti",f:"Tempo pizza"},
+{q:"Il cuore serve a?",c:"Pompare sangue",a:"Respirare",w:"Pensare",f:"Mandare glitter"},
+{q:"Le piante producono?",c:"Ossigeno",a:"Acqua",w:"Plastica",f:"Caramelle"},
 
-/* ===== SCIENZE ===== */
-{q:"Alessio ricorda: acqua bolle a?",c:"100°C",a:"90°C",w:"50°C",f:"Quando urli QUAA"},
-{q:"Adriano dice: stato solido acqua?",c:"Ghiaccio",a:"Vapore",w:"Pioggia",f:"Granita rosa"},
-{q:"Carolina ricorda: 1000 grammi?",c:"1 kg",a:"10 kg",w:"100 kg",f:"Chilo glitter"},
-{q:"Elena dice: aria è?",c:"Gas",a:"Liquido",w:"Solido",f:"Profumo magico"},
-{q:"Alice ricorda: Terra è?",c:"Pianeta",a:"Stella",w:"Cometa",f:"Palla glitter"},
-{q:"Adele dice: 60 minuti?",c:"1 ora",a:"2 ore",w:"30 minuti",f:"Tempo pizza"},
-{q:"Federica ricorda: rettangolo ha?",c:"4 lati",a:"3 lati",w:"5 lati",f:"100 lati"},
-{q:"Azzurra dice: triangolo ha?",c:"3 lati",a:"4 lati",w:"5 lati",f:"Stelline"},
-{q:"Tomas ricorda: 1/2 equivale?",c:"0,5",a:"0,2",w:"0,8",f:"Mezza pizza"},
-{q:"Chicco dice: 206 sono?",c:"Ossa nel corpo",a:"Muscoli",w:"Denti",f:"Glitter"},
+/* GEOGRAFIA */
+{q:"Capitale Francia?",c:"Parigi",a:"Lione",w:"Roma",f:"Hogwarts"},
+{q:"Capitale Germania?",c:"Berlino",a:"Monaco",w:"Vienna",f:"Castello rosa"},
+{q:"Capitale Spagna?",c:"Madrid",a:"Barcellona",w:"Lisbona",f:"Fantasilandia"},
+{q:"Il continente dell’Italia è?",c:"Europa",a:"Asia",w:"Africa",f:"Regno glitter"},
+{q:"Il pianeta rosso è?",c:"Marte",a:"Venere",w:"Giove",f:"Pianeta merendine"},
 
-/* ===== PIXAR ===== */
-{q:"In Toy Story il cowboy è?",c:"Woody",a:"Jessie",w:"Buzz",f:"Ron cowboy"},
-{q:"In Nemo il papà è?",c:"Marlin",a:"Dory",w:"Buzz",f:"Hermione pesce"},
-{q:"In Frozen pupazzo neve?",c:"Olaf",a:"Kristoff",w:"Hans",f:"Chicco pupazzo"},
-{q:"In Cars protagonista?",c:"Saetta McQueen",a:"Cricchetto",w:"Woody",f:"Azzurra volante"},
-{q:"In Inside Out gioia è?",c:"Gialla",a:"Blu",w:"Rossa",f:"Glitter"},
-{q:"In Coco protagonista?",c:"Miguel",a:"Hector",w:"Woody",f:"Tomas mariachi"},
-{q:"In UP vecchietto?",c:"Carl",a:"Russell",w:"Buzz",f:"Adriano volante"},
-{q:"In Brave protagonista?",c:"Merida",a:"Elsa",w:"Anna",f:"Carolina ribelle"},
-{q:"In Encanto casa magica?",c:"Casita",a:"Castello",w:"Grotta",f:"Casa glitter"},
-{q:"In Luca ambientato in?",c:"Italia",a:"Francia",w:"USA",f:"Hogwarts mare"},
+/* GRAMMATICA */
+{q:"Il plurale di amica è?",c:"Amiche",a:"Amici",w:"Amicae",f:"Amichette glitter"},
+{q:"Il verbo in 'io corro' è?",c:"Corro",a:"Io",w:"Cor",f:"Glitter"},
+{q:"'Casa' è un?",c:"Nome",a:"Verbo",w:"Aggettivo",f:"Incantesimo"},
+{q:"'Bello' è un?",c:"Aggettivo",a:"Verbo",w:"Nome",f:"Caramella"},
+{q:"Il contrario di caldo è?",c:"Freddo",a:"Tiepidino",w:"Rosso",f:"Super glitter"},
 
-/* ===== HARRY POTTER ===== */
-{q:"Amica di Harry?",c:"Hermione",a:"Ginny",w:"Elsa",f:"Adele maga"},
-{q:"Preside Hogwarts?",c:"Silente",a:"Piton",w:"Hagrid",f:"Maestra Chiara"},
-{q:"Casa verde?",c:"Serpeverde",a:"Corvonero",w:"Grifondoro",f:"Casa pizza"},
-{q:"Amico rosso?",c:"Ron",a:"Neville",w:"Draco",f:"Chicco Weasley"},
-{q:"Animale di Harry?",c:"Gufo",a:"Gatto",w:"Rana",f:"Unicorno rosa"},
-{q:"Insegnante pozioni?",c:"Piton",a:"Silente",w:"Hagrid",f:"Cristiana potion"},
-{q:"Sport magico?",c:"Quidditch",a:"Calcio",w:"Tennis",f:"Glitterball"},
-{q:"Scuola di magia?",c:"Hogwarts",a:"Beauxbatons",w:"Durmstrang",f:"Scuola glitter"},
-{q:"Oggetto invisibilità?",c:"Mantello",a:"Bacchetta",w:"Pozione",f:"Pigiama magico"},
-{q:"Nemico principale?",c:"Voldemort",a:"Draco",w:"Hagrid",f:"Il compito sorpresa"},
+/* GEOMETRIA */
+{q:"Un triangolo ha?",c:"3 lati",a:"4 lati",w:"5 lati",f:"Stelline"},
+{q:"Un quadrato ha?",c:"4 lati uguali",a:"4 lati diversi",w:"3 lati",f:"Arcobaleno"},
+{q:"Perimetro significa?",c:"Somma dei lati",a:"Area interna",w:"Altezza",f:"Magia"},
+{q:"Un rettangolo ha?",c:"4 angoli retti",a:"2 angoli",w:"5 angoli",f:"Angoli glitter"},
+{q:"Area quadrato lato 5?",c:"25",a:"20",w:"15",f:"Numero magico"},
 
-/* ===== ALTRE MATEMATICA ===== */
-{q:"12 x 12?",c:"144",a:"132",w:"156",f:"Arcobaleno"},
-{q:"90 : 3?",c:"30",a:"25",w:"35",f:"Selfie 30"},
-{q:"8 x 9?",c:"72",a:"64",w:"81",f:"Glitter 72"},
-{q:"50 : 5?",c:"10",a:"5",w:"15",f:"Numero rosa"},
-{q:"6 x 8?",c:"48",a:"42",w:"56",f:"Stelline"},
-{q:"120 : 12?",c:"10",a:"12",w:"8",f:"Tempo pizza"},
-{q:"14 x 7?",c:"98",a:"84",w:"91",f:"Troppi compiti"},
-{q:"45 : 9?",c:"5",a:"6",w:"4",f:"Numero glitter"},
-{q:"16 x 5?",c:"80",a:"75",w:"85",f:"Selfie 80"},
-{q:"200 : 20?",c:"10",a:"20",w:"5",f:"Arcobaleno 10"}
+/* FROZEN */
+{q:"La regina del ghiaccio è?",c:"Elsa",a:"Anna",w:"Olaf",f:"Carolina regina"},
+{q:"Il pupazzo di neve si chiama?",c:"Olaf",a:"Kristoff",w:"Hans",f:"Chicco pupazzo"},
+{q:"La sorella di Elsa è?",c:"Anna",a:"Elsa",w:"Mirabel",f:"Alice ghiacciata"},
+{q:"Il potere di Elsa è?",c:"Ghiaccio",a:"Fuoco",w:"Vento",f:"Glitter power"},
+{q:"Il regno si chiama?",c:"Arendelle",a:"Hogwarts",w:"Narnia",f:"Regno rosa"},
 
-/* Totale 100 domande */
+/* HARRY POTTER */
+{q:"La migliore amica di Harry è?",c:"Hermione",a:"Ginny",w:"Elsa",f:"Federica maga"},
+{q:"La scuola si chiama?",c:"Hogwarts",a:"Beauxbatons",w:"Durmstrang",f:"Scuola glitter"},
+{q:"Lo sport magico è?",c:"Quidditch",a:"Calcio",w:"Tennis",f:"Glitterball"},
+{q:"Il preside è?",c:"Silente",a:"Piton",w:"Hagrid",f:"Maestra Chiara"},
+{q:"La casa verde è?",c:"Serpeverde",a:"Grifondoro",w:"Corvonero",f:"Casa pizza"}
 
 ];
 
@@ -160,23 +197,22 @@ message.innerHTML="";
 }
 
 function selectOption(index){
-let opts=document.querySelectorAll(".option");
-let currentOptions=shuffle([
+let opts=shuffle([
 {text:questions[current].c,correct:true},
 {text:questions[current].a,correct:false},
 {text:questions[current].w,correct:false},
 {text:questions[current].f,correct:false}
 ]);
-if(currentOptions[index].correct){
+if(opts[index].correct){
 document.getElementById("correctSound").play();
-message.innerHTML="🎉 Bravissimaaa!";
 score++;
 current++;
 setTimeout(()=>{
 if(current<questions.length){
 loadQuestion();
 }else{
-quiz.innerHTML=`<div class="question">Hai finito! Punteggio: ${score}/100 💖</div>`;
+document.getElementById("winSound").play();
+quiz.innerHTML=`<div class="question">Hai finito! 💖 Punteggio: ${score}/${questions.length}</div>`;
 progressBar.style.width="100%";
 }
 },600);
@@ -185,8 +221,6 @@ document.getElementById("wrongSound").play();
 message.innerHTML="❌ Quaaa-puaaa 😜 Riprova!";
 }
 }
-
-loadQuestion();
 
 </script>
 </body>
