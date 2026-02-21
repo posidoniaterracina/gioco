@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Super Quiz Party 💖✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Baloo 2',cursive;
+background:linear-gradient(135deg,#ffd6f6,#c8e7ff,#e0c3fc);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+overflow:hidden;
+}
+.container{
+background:white;
+width:100%;
+max-width:850px;
+border-radius:25px;
+padding:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+text-align:center;
+position:relative;
+}
+h1{color:#ff4da6;margin-bottom:10px;}
+input{
+padding:10px;
+border-radius:12px;
+border:2px solid #ffd6f6;
+margin-bottom:15px;
+font-family:'Baloo 2';
+}
+.progress{
+height:8px;
+background:#eee;
+border-radius:5px;
+overflow:hidden;
+margin-bottom:25px;
+}
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff85c1,#85d4ff);
+transition:0.3s;
+}
+.question{
+font-size:20px;
+margin-bottom:20px;
+min-height:60px;
+color:#6a1b9a;
+}
+.option{
+margin:8px 0;
+padding:12px;
+border-radius:15px;
+background:#f8f0ff;
+cursor:pointer;
+transition:0.3s;
+}
+.option:hover{
+background:#ffe6f7;
+transform:scale(1.05);
+}
+.result{
+margin-top:25px;
+font-size:22px;
+color:#ff4da6;
+}
+.star{
+position:absolute;
+color:gold;
+animation:fall 3s linear infinite;
+}
+@keyframes fall{
+0%{top:-10px;}
+100%{top:100vh;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<h1>Quiz Party tra Amiche 💖✨</h1>
+
+<div id="startScreen">
+<p>Scrivi il tuo nome principessa:</p>
+<input type="text" id="playerName" placeholder="Il tuo nome 💕">
+<br>
+<button onclick="startGame()">Iniziaaaa ✨</button>
+</div>
+
+<div id="game" style="display:none;">
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+<div id="quiz"></div>
+<div id="result" class="result"></div>
+</div>
+</div>
+
+<audio id="correctSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9c6e08.mp3"></audio>
+<audio id="wrongSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_9b2a35e6b6.mp3"></audio>
+<audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7f2f1a64f5.mp3"></audio>
+
+<script>
+
+let player="";
+
+function startGame(){
+player=document.getElementById("playerName").value;
+if(player==="") player="Super Amica";
+document.getElementById("startScreen").style.display="none";
+document.getElementById("game").style.display="block";
+loadQuestion();
+createStars();
+}
+
+const questions=[
+{q:"Quanto fa 7x8?",c:"56",a:"54",w:"48",f:"Glitter matematico ✨"},
+{q:"Capitale Francia?",c:"Parigi",a:"Lione",w:"Madrid",f:"Hogwarts"},
+{q:"Chi è l'amica di Harry Potter?",c:"Hermione",a:"Ginny",w:"Elsa",f:"Barbie maga"},
+{q:"In Toy Story il cowboy è?",c:"Woody",a:"Jessie",w:"Buzz",f:"Ron cowboy"},
+{q:"100 : 4?",c:"25",a:"20",w:"40",f:"Unicorno rosa"}
+];
+
+while(questions.length<100){
+questions.push(questions[Math.floor(Math.random()*5)]);
+}
+
+function shuffle(array){
+return array.sort(()=>Math.random()-0.5);
+}
+
+const quizData=questions.map((q,i)=>({
+question:`Domanda ${i+1}: ${q.q}`,
+options:shuffle([
+{text:q.c,correct:true},
+{text:q.a,correct:false},
+{text:q.w,correct:false},
+{text:q.f,correct:false}
+])
+}));
+
+let current=0;
+let score=0;
+
+const quiz=document.getElementById("quiz");
+const result=document.getElementById("result");
+const progressBar=document.getElementById("progressBar");
+
+function loadQuestion(){
+let q=quizData[current];
+quiz.innerHTML=`<div class="question">${q.question}</div>`+
+q.options.map((opt,i)=>
+`<div class="option" onclick="selectOption(${i})">${opt.text}</div>`
+).join("");
+progressBar.style.width=((current/quizData.length)*100)+"%";
+}
+
+function selectOption(index){
+if(quizData[current].options[index].correct){
+score++;
+document.getElementById("correctSound").play();
+}else{
+document.getElementById("wrongSound").play();
+}
+current++;
+if(current<quizData.length){
+setTimeout(loadQuestion,600);
+}else{
+showResult();
+}
+}
+
+function showResult(){
+quiz.innerHTML="";
+progressBar.style.width="100%";
+let percent=Math.round((score/quizData.length)*100);
+
+document.getElementById("winSound").play();
+confetti();
+
+let message="";
+if(percent>=85){
+message="🌟 "+player+" sei la Regina del Quiz! 👑✨";
+}else if(percent>=60){
+message="💖 "+player+" bravissimaaa! Party riuscitissimo!";
+}else{
+message="😜 "+player+" avete riso troppo! Ma che divertimento!";
+}
+
+result.innerHTML=`Punteggio finale: <strong>${percent}%</strong><br><br>${message}`;
+}
+
+function createStars(){
+setInterval(()=>{
+let star=document.createElement("div");
+star.classList.add("star");
+star.innerHTML="✨";
+star.style.left=Math.random()*100+"vw";
+star.style.fontSize=Math.random()*20+10+"px";
+document.body.appendChild(star);
+setTimeout(()=>star.remove(),3000);
+},300);
+}
+
+function confetti(){
+for(let i=0;i<100;i++){
+let conf=document.createElement("div");
+conf.classList.add("star");
+conf.innerHTML="🎉";
+conf.style.left=Math.random()*100+"vw";
+conf.style.fontSize="20px";
+document.body.appendChild(conf);
+setTimeout(()=>conf.remove(),3000);
+}
+}
+
+</script>
+</body>
+</html>
