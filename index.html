@@ -5,74 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Super Quiz Party 💖</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 font-family:'Baloo 2',cursive;
 background:linear-gradient(135deg,#ffb3ec,#c8e7ff,#fcd6ff);
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:15px;
-overflow:hidden;
-}
+display:flex;justify-content:center;align-items:center;
+min-height:100vh;padding:15px;overflow:hidden}
 .container{
-background:white;
-width:100%;
-max-width:650px;
-border-radius:25px;
-padding:25px;
+background:white;width:100%;max-width:680px;
+border-radius:25px;padding:25px;
 box-shadow:0 10px 30px rgba(0,0,0,0.2);
-text-align:center;
-position:relative;
-}
-h1{font-size:28px;color:#ff1493;margin-bottom:10px;}
-.intro{font-size:20px;margin-bottom:20px;color:#6a1b9a;}
+text-align:center;position:relative}
+h1{font-size:28px;color:#ff1493;margin-bottom:10px}
+.intro{font-size:20px;margin-bottom:20px;color:#6a1b9a}
 button{
-padding:14px 25px;
-border:none;
-border-radius:20px;
+padding:14px 25px;border:none;border-radius:20px;
 background:linear-gradient(90deg,#ff69b4,#87cefa);
-color:white;
-font-size:20px;
-cursor:pointer;
-}
-button:active{transform:scale(0.95);}
-.question{font-size:23px;margin-bottom:20px;color:#6a1b9a;}
+color:white;font-size:20px;cursor:pointer}
+.question{font-size:23px;margin-bottom:20px;color:#6a1b9a}
 .option{
-margin:10px 0;
-padding:16px;
-border-radius:18px;
-background:#ffe6fa;
-font-size:20px;
-cursor:pointer;
-transition:0.3s;
-}
-.option:active{transform:scale(0.95);}
-.message{margin-top:10px;font-size:18px;min-height:25px;}
-.progress{height:8px;background:#eee;border-radius:10px;margin-bottom:15px;}
-.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff69b4,#87cefa);transition:0.3s;}
-.star{
-position:absolute;
-color:gold;
-animation:fall 3s linear infinite;
-}
-@keyframes fall{
-0%{top:-10px;}
-100%{top:100vh;}
-}
+margin:10px 0;padding:16px;border-radius:18px;
+background:#ffe6fa;font-size:20px;cursor:pointer}
+.option:active{transform:scale(0.95)}
+.message{margin-top:10px;font-size:18px;min-height:25px}
+.progress{height:8px;background:#eee;border-radius:10px;margin-bottom:15px}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#ff69b4,#87cefa);transition:0.3s}
+.star{position:absolute;color:gold;animation:fall 3s linear infinite}
+@keyframes fall{0%{top:-10px}100%{top:100vh}}
 </style>
 </head>
-
 <body>
 <div class="container">
 
 <div id="introScreen">
 <h1>✨ Super Quiz tra Amiche ✨</h1>
 <div class="intro">
-Carolina, Elena e Alice hanno organizzato un pomeriggio speciale! 💖  
+Carolina, Elena e Alice hanno organizzato un pomeriggio speciale 💖  
 Tra risate, glitter e cervelli in azione…  
 Chi sarà la Regina del Quiz? 👑
 </div>
@@ -93,135 +62,144 @@ Chi sarà la Regina del Quiz? 👑
 <audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_7f2f1a64f5.mp3"></audio>
 
 <script>
-
 function startGame(){
 document.getElementById("introScreen").style.display="none";
 document.getElementById("game").style.display="block";
-loadQuestion();
-createStars();
-}
-
+loadQuestion();createStars()}
 function createStars(){
 setInterval(()=>{
 let s=document.createElement("div");
-s.classList.add("star");
-s.innerHTML="✨";
+s.classList.add("star");s.innerHTML="✨";
 s.style.left=Math.random()*100+"vw";
 s.style.fontSize=Math.random()*20+10+"px";
 document.body.appendChild(s);
-setTimeout(()=>s.remove(),3000);
-},400);
-}
+setTimeout(()=>s.remove(),3000)},400)}
 
-const questions = [
+const questions=[
 
-/* MATEMATICA */
-{q:"Carolina calcola: 9 x 8?",c:"72",a:"64",w:"81",f:"Glitter infinito"},
-{q:"Elena dice: 144 : 12?",c:"12",a:"14",w:"10",f:"Pizzette"},
-{q:"Alice calcola: 25 x 4?",c:"100",a:"90",w:"110",f:"Arcobaleno"},
-{q:"Adele ricorda: 81 : 9?",c:"9",a:"8",w:"7",f:"Unicorno"},
-{q:"Federica dice: 7 x 7?",c:"49",a:"42",w:"56",f:"Stelline"},
+/* ===== MATEMATICA 5 ===== */
+{q:"9 x 8?",c:"72",a:"64",w:"81",f:"Glitter"},
+{q:"144 : 12?",c:"12",a:"14",w:"10",f:"Pizzette"},
+{q:"25 x 4?",c:"100",a:"90",w:"110",f:"Arcobaleno"},
+{q:"81 : 9?",c:"9",a:"8",w:"7",f:"Unicorno"},
+{q:"7 x 7?",c:"49",a:"42",w:"56",f:"Stelline"},
 
-/* SCIENZE */
-{q:"L'acqua bolle a?",c:"100°C",a:"90°C",w:"50°C",f:"Quando urli QUAAA"},
-{q:"Lo stato solido dell'acqua è?",c:"Ghiaccio",a:"Vapore",w:"Pioggia",f:"Granita rosa"},
-{q:"Il sole è una?",c:"Stella",a:"Pianeta",w:"Cometa",f:"Lampadina gigante"},
-{q:"1000 grammi sono?",c:"1 kg",a:"10 kg",w:"100 kg",f:"Chilo glitter"},
+/* ===== SCIENZE 10 ===== */
+{q:"L'acqua bolle a?",c:"100°C",a:"90°C",w:"50°C",f:"Quando urli"},
+{q:"Stato solido acqua?",c:"Ghiaccio",a:"Vapore",w:"Pioggia",f:"Granita"},
+{q:"Il sole è una?",c:"Stella",a:"Pianeta",w:"Cometa",f:"Lampadina"},
+{q:"1000 g sono?",c:"1 kg",a:"10 kg",w:"100 kg",f:"Glitter"},
 {q:"La Terra è un?",c:"Pianeta",a:"Stella",w:"Asteroide",f:"Palla magica"},
-{q:"L'aria è principalmente un?",c:"Gas",a:"Liquido",w:"Solido",f:"Profumo glitter"},
-{q:"Il corpo umano ha circa?",c:"206 ossa",a:"200 ossa",w:"150 ossa",f:"Ossa rosa"},
-{q:"60 minuti sono?",c:"1 ora",a:"2 ore",w:"30 minuti",f:"Tempo pizza"},
-{q:"Il cuore serve a?",c:"Pompare sangue",a:"Respirare",w:"Pensare",f:"Mandare glitter"},
+{q:"Il cuore serve a?",c:"Pompare sangue",a:"Respirare",w:"Pensare",f:"Glitter"},
 {q:"Le piante producono?",c:"Ossigeno",a:"Acqua",w:"Plastica",f:"Caramelle"},
+{q:"206 sono?",c:"Ossa",a:"Muscoli",w:"Denti",f:"Glitter"},
+{q:"60 minuti?",c:"1 ora",a:"2 ore",w:"30 min",f:"Pizza"},
+{q:"L'aria è?",c:"Gas",a:"Liquido",w:"Solido",f:"Profumo"},
 
-/* GEOGRAFIA */
+/* ===== GEOGRAFIA 5 ===== */
 {q:"Capitale Francia?",c:"Parigi",a:"Lione",w:"Roma",f:"Hogwarts"},
-{q:"Capitale Germania?",c:"Berlino",a:"Monaco",w:"Vienna",f:"Castello rosa"},
+{q:"Capitale Germania?",c:"Berlino",a:"Monaco",w:"Vienna",f:"Castello"},
 {q:"Capitale Spagna?",c:"Madrid",a:"Barcellona",w:"Lisbona",f:"Fantasilandia"},
-{q:"Il continente dell’Italia è?",c:"Europa",a:"Asia",w:"Africa",f:"Regno glitter"},
-{q:"Il pianeta rosso è?",c:"Marte",a:"Venere",w:"Giove",f:"Pianeta merendine"},
+{q:"Continente Italia?",c:"Europa",a:"Asia",w:"Africa",f:"Regno glitter"},
+{q:"Pianeta rosso?",c:"Marte",a:"Venere",w:"Giove",f:"Merendine"},
 
-/* GRAMMATICA */
-{q:"Il plurale di amica è?",c:"Amiche",a:"Amici",w:"Amicae",f:"Amichette glitter"},
-{q:"Il verbo in 'io corro' è?",c:"Corro",a:"Io",w:"Cor",f:"Glitter"},
+/* ===== GRAMMATICA 5 ===== */
+{q:"Plurale di amica?",c:"Amiche",a:"Amici",w:"Amicae",f:"Glitterette"},
 {q:"'Casa' è un?",c:"Nome",a:"Verbo",w:"Aggettivo",f:"Incantesimo"},
-{q:"'Bello' è un?",c:"Aggettivo",a:"Verbo",w:"Nome",f:"Caramella"},
-{q:"Il contrario di caldo è?",c:"Freddo",a:"Tiepidino",w:"Rosso",f:"Super glitter"},
+{q:"'Bello' è un?",c:"Aggettivo",a:"Nome",w:"Verbo",f:"Caramella"},
+{q:"Contrario di caldo?",c:"Freddo",a:"Tiepidino",w:"Rosso",f:"Super glitter"},
+{q:"Verbo in 'io corro'?",c:"Corro",a:"Io",w:"Cor",f:"Arcobaleno"},
 
-/* GEOMETRIA */
-{q:"Un triangolo ha?",c:"3 lati",a:"4 lati",w:"5 lati",f:"Stelline"},
-{q:"Un quadrato ha?",c:"4 lati uguali",a:"4 lati diversi",w:"3 lati",f:"Arcobaleno"},
-{q:"Perimetro significa?",c:"Somma dei lati",a:"Area interna",w:"Altezza",f:"Magia"},
-{q:"Un rettangolo ha?",c:"4 angoli retti",a:"2 angoli",w:"5 angoli",f:"Angoli glitter"},
-{q:"Area quadrato lato 5?",c:"25",a:"20",w:"15",f:"Numero magico"},
+/* ===== GEOMETRIA 5 ===== */
+{q:"Triangolo ha?",c:"3 lati",a:"4 lati",w:"5 lati",f:"Stelle"},
+{q:"Quadrato ha?",c:"4 lati uguali",a:"4 diversi",w:"3 lati",f:"Arcobaleno"},
+{q:"Perimetro è?",c:"Somma lati",a:"Area",w:"Altezza",f:"Magia"},
+{q:"Rettangolo ha?",c:"4 angoli retti",a:"2",w:"5",f:"Glitter"},
+{q:"Area lato 5?",c:"25",a:"20",w:"15",f:"Numero rosa"},
 
-/* FROZEN */
-{q:"La regina del ghiaccio è?",c:"Elsa",a:"Anna",w:"Olaf",f:"Carolina regina"},
-{q:"Il pupazzo di neve si chiama?",c:"Olaf",a:"Kristoff",w:"Hans",f:"Chicco pupazzo"},
-{q:"La sorella di Elsa è?",c:"Anna",a:"Elsa",w:"Mirabel",f:"Alice ghiacciata"},
-{q:"Il potere di Elsa è?",c:"Ghiaccio",a:"Fuoco",w:"Vento",f:"Glitter power"},
-{q:"Il regno si chiama?",c:"Arendelle",a:"Hogwarts",w:"Narnia",f:"Regno rosa"},
+/* ===== FROZEN 10 ===== */
+{q:"Regina ghiaccio?",c:"Elsa",a:"Anna",w:"Olaf",f:"Carolina"},
+{q:"Pupazzo neve?",c:"Olaf",a:"Kristoff",w:"Hans",f:"Chicco"},
+{q:"Sorella Elsa?",c:"Anna",a:"Elsa",w:"Mirabel",f:"Alice"},
+{q:"Potere Elsa?",c:"Ghiaccio",a:"Fuoco",w:"Vento",f:"Glitter"},
+{q:"Regno?",c:"Arendelle",a:"Hogwarts",w:"Narnia",f:"Regno rosa"},
+{q:"Kristoff guida?",c:"Slitta",a:"Nave",w:"Auto",f:"Unicorno"},
+{q:"Renna si chiama?",c:"Sven",a:"Olaf",w:"Hans",f:"Glitter"},
+{q:"Canzone famosa?",c:"Let it go",a:"Hakuna",w:"Coco",f:"Arcobaleno"},
+{q:"Elsa vive in?",c:"Castello ghiaccio",a:"Grotta",w:"Foresta",f:"Pizza"},
+{q:"Olaf ama?",c:"Abbracci",a:"Freddo",w:"Caldo",f:"Selfie"},
 
-/* HARRY POTTER */
-{q:"La migliore amica di Harry è?",c:"Hermione",a:"Ginny",w:"Elsa",f:"Federica maga"},
-{q:"La scuola si chiama?",c:"Hogwarts",a:"Beauxbatons",w:"Durmstrang",f:"Scuola glitter"},
-{q:"Lo sport magico è?",c:"Quidditch",a:"Calcio",w:"Tennis",f:"Glitterball"},
-{q:"Il preside è?",c:"Silente",a:"Piton",w:"Hagrid",f:"Maestra Chiara"},
-{q:"La casa verde è?",c:"Serpeverde",a:"Grifondoro",w:"Corvonero",f:"Casa pizza"}
+/* ===== HARRY POTTER 10 ===== */
+{q:"Amica Harry?",c:"Hermione",a:"Ginny",w:"Elsa",f:"Federica"},
+{q:"Scuola?",c:"Hogwarts",a:"Durmstrang",w:"Beauxbatons",f:"Scuola rosa"},
+{q:"Sport?",c:"Quidditch",a:"Calcio",w:"Tennis",f:"Glitterball"},
+{q:"Preside?",c:"Silente",a:"Piton",w:"Hagrid",f:"Chiara"},
+{q:"Casa verde?",c:"Serpeverde",a:"Grifondoro",w:"Corvonero",f:"Pizza"},
+{q:"Bacchetta serve a?",c:"Magia",a:"Scrivere",w:"Mangiare",f:"Selfie"},
+{q:"Animale Harry?",c:"Gufo",a:"Gatto",w:"Rana",f:"Unicorno"},
+{q:"Nemico?",c:"Voldemort",a:"Draco",w:"Hagrid",f:"Compito"},
+{q:"Mantello rende?",c:"Invisibile",a:"Veloci",w:"Forti",f:"Glitter"},
+{q:"Ron è?",c:"Amico",a:"Prof",w:"Nemico",f:"Principe"},
+
+/* ===== LOGICA 20 ===== */
+{q:"Completa: 2,4,6,?",c:"8",a:"7",w:"9",f:"Glitter"},
+{q:"Se 3+3=6, 6+6=?",c:"12",a:"10",w:"14",f:"Arcobaleno"},
+{q:"Quale è diverso? Mela, Pera, Auto, Banana",c:"Auto",a:"Mela",w:"Banana",f:"Glitter"},
+{q:"Gatto è a miagolio come cane è a?",c:"Abbaio",a:"Muggito",w:"Cinguettio",f:"Glitter"},
+{q:"Se oggi è lunedì, domani?",c:"Martedì",a:"Domenica",w:"Venerdì",f:"Pizza"},
+{q:"Quale numero manca: 5,10,15,?",c:"20",a:"25",w:"18",f:"Glitter"},
+{q:"Opposto di alto?",c:"Basso",a:"Medio",w:"Grande",f:"Rosa"},
+{q:"Se 10-2=8, 8-2=?",c:"6",a:"5",w:"7",f:"Glitter"},
+{q:"Quale figura ha 4 lati?",c:"Quadrato",a:"Triangolo",w:"Cerchio",f:"Arcobaleno"},
+{q:"Metà di 20?",c:"10",a:"5",w:"15",f:"Glitter"},
+{q:"3x2=?",c:"6",a:"5",w:"7",f:"Unicorno"},
+{q:"Giallo è colore, cane è?",c:"Animale",a:"Pianta",w:"Cibo",f:"Glitter"},
+{q:"Se 4+5=9, 9+5=?",c:"14",a:"13",w:"15",f:"Arcobaleno"},
+{q:"Quale non vola? Aquila, Rondine, Sasso",c:"Sasso",a:"Aquila",w:"Rondine",f:"Glitter"},
+{q:"Se 100-50=?",c:"50",a:"40",w:"60",f:"Glitter"},
+{q:"Opposto di veloce?",c:"Lento",a:"Rapido",w:"Grande",f:"Arcobaleno"},
+{q:"Numero dopo 19?",c:"20",a:"21",w:"18",f:"Glitter"},
+{q:"2x5=?",c:"10",a:"12",w:"8",f:"Pizza"},
+{q:"Quale è mammifero? Balena, Squalo, Polpo",c:"Balena",a:"Squalo",w:"Polpo",f:"Glitter"},
+{q:"Se 1,3,5,7,?",c:"9",a:"8",w:"10",f:"Arcobaleno"}
 
 ];
 
 function shuffle(a){return a.sort(()=>Math.random()-0.5);}
 shuffle(questions);
 
-let current=0;
-let score=0;
-
+let current=0,score=0;
 const quiz=document.getElementById("quiz");
 const progressBar=document.getElementById("progressBar");
 const message=document.getElementById("message");
 
 function loadQuestion(){
 let q=questions[current];
-quiz.innerHTML=`<div class="question">Domanda ${current+1}: ${q.q}</div>`+
-shuffle([
+let opts=shuffle([
 {text:q.c,correct:true},
 {text:q.a,correct:false},
 {text:q.w,correct:false},
 {text:q.f,correct:false}
-]).map((opt,i)=>
-`<div class="option" onclick="selectOption(${i})">${opt.text}</div>`
-).join("");
+]);
+quiz.innerHTML=`<div class="question">Domanda ${current+1}: ${q.q}</div>`+
+opts.map((o,i)=>`<div class="option" onclick="selectOption(${i},${o.correct})">${o.text}</div>`).join("");
 progressBar.style.width=((current/questions.length)*100)+"%";
 message.innerHTML="";
 }
 
-function selectOption(index){
-let opts=shuffle([
-{text:questions[current].c,correct:true},
-{text:questions[current].a,correct:false},
-{text:questions[current].w,correct:false},
-{text:questions[current].f,correct:false}
-]);
-if(opts[index].correct){
+function selectOption(i,isCorrect){
+if(isCorrect){
 document.getElementById("correctSound").play();
-score++;
-current++;
-setTimeout(()=>{
-if(current<questions.length){
-loadQuestion();
-}else{
+score++;current++;
+if(current<questions.length){setTimeout(loadQuestion,500)}
+else{
 document.getElementById("winSound").play();
-quiz.innerHTML=`<div class="question">Hai finito! 💖 Punteggio: ${score}/${questions.length}</div>`;
-progressBar.style.width="100%";
-}
-},600);
+quiz.innerHTML=`<div class="question">🎉 Finito! Punteggio: ${score}/100 💖</div>`;
+progressBar.style.width="100%"}
 }else{
 document.getElementById("wrongSound").play();
-message.innerHTML="❌ Quaaa-puaaa 😜 Riprova!";
+message.innerHTML="❌ Quaaa-puaaa 😜 Riprova!"}
 }
-}
-
 </script>
 </body>
 </html>
